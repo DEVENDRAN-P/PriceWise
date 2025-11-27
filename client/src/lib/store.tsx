@@ -41,16 +41,26 @@ export interface Price {
   stockStatus: "available" | "low" | "out";
 }
 
+export interface CartItem {
+  itemId: string;
+  quantity: number;
+  addedAt: Date;
+}
+
 export interface AppState {
   user: User | null;
   shops: Shop[];
   items: Item[];
   prices: Price[];
+  cart: CartItem[];
   login: (email: string, role: UserRole) => void;
   logout: () => void;
   addPrice: (price: Omit<Price, "id" | "updatedAt">) => void;
   getCategories: () => string[];
   getItemsByCategory: (category: string) => Item[];
+  addToCart: (itemId: string) => void;
+  removeFromCart: (itemId: string) => void;
+  clearCart: () => void;
 }
 
 // Mock Data
@@ -156,6 +166,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [shops] = useState<Shop[]>(MOCK_SHOPS);
   const [items] = useState<Item[]>(MOCK_ITEMS);
   const [prices, setPrices] = useState<Price[]>(MOCK_PRICES);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const { toast } = useToast();
 
   const login = (email: string, role: UserRole) => {
@@ -196,8 +207,46 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return items.filter(item => item.category === category);
   };
 
+  const addToCart = (itemId: string) => {
+    const item = items.find(i => i.id === itemId);
+    if (!item) return;
+    
+    setCart((prev) => {
+      const existing = prev.find(c => c.itemId === itemId);
+      if (existing) {
+        return prev.map(c => 
+          c.itemId === itemId ? { ...c, quantity: c.quantity + 1 } : c
+        );
+      }
+      return [...prev, { itemId, quantity: 1, addedAt: new Date() }];
+    });
+    toast({ title: "Added to comparison", description: `${item.name} added` });
+  };
+
+  const removeFromCart = (itemId: string) => {
+    setCart((prev) => prev.filter(c => c.itemId !== itemId));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
   return (
-    <AppContext.Provider value={{ user, shops, items, prices, login, logout, addPrice, getCategories, getItemsByCategory }}>
+    <AppContext.Provider value={{ 
+      user, 
+      shops, 
+      items, 
+      prices, 
+      cart, 
+      login, 
+      logout, 
+      addPrice, 
+      getCategories, 
+      getItemsByCategory,
+      addToCart,
+      removeFromCart,
+      clearCart
+    }}>
       {children}
     </AppContext.Provider>
   );

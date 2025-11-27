@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Plus } from "lucide-react";
 
 export default function CategoryPage() {
-  const { getItemsByCategory, getCategories } = useApp();
+  const { getItemsByCategory, getCategories, addToCart } = useApp();
   const [location, setLocation] = useLocation();
   
   // Extract category from URL or get first category
@@ -45,13 +45,25 @@ export default function CategoryPage() {
           {items.map(item => (
             <Card key={item.id} className="overflow-hidden border-none shadow-sm group hover:shadow-md transition-shadow">
               <div className="w-full h-40 bg-slate-200 overflow-hidden">
-                <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e2e8f0' width='200' height='200'/%3E%3C/svg%3E";
+                  }}
+                />
               </div>
               <CardContent className="p-3">
                 <h3 className="font-bold text-sm truncate">{item.name}</h3>
                 <p className="text-xs text-muted-foreground mb-3">per {item.unit}</p>
                 
-                <Button size="sm" className="w-full bg-primary/10 text-primary hover:bg-primary hover:text-white">
+                <Button 
+                  size="sm" 
+                  className="w-full bg-primary/10 text-primary hover:bg-primary hover:text-white"
+                  onClick={() => addToCart(item.id)}
+                  data-testid={`button-add-${item.id}`}
+                >
                   <Plus className="w-3 h-3 mr-1" /> Add
                 </Button>
               </CardContent>

@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { Suspense } from "react";
 
 // Fix Leaflet marker icon issue
 import icon from "leaflet/dist/images/marker-icon.png";
@@ -65,6 +66,7 @@ export default function Home() {
             placeholder="Search for tomato, rice, etc..." 
             className="pl-9 bg-slate-50 border-none shadow-sm"
             onFocus={() => setLocation("/compare")}
+            data-testid="input-search"
           />
         </div>
       </header>
@@ -93,6 +95,7 @@ export default function Home() {
                 key={cat}
                 onClick={() => setLocation(`/category?cat=${cat}`)}
                 className="flex flex-col items-center gap-2 min-w-[80px] active:scale-95 transition-transform"
+                data-testid={`button-category-${cat}`}
               >
                 <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 border border-slate-100 group-hover:shadow-md transition-shadow">
                   <img src={vegImg} alt={cat} className="w-full h-full object-cover rounded-lg" />
@@ -141,7 +144,13 @@ export default function Home() {
                           <span className="text-xs text-slate-400 line-through">₹{deal.price + 10}</span>
                           <div className="font-bold text-lg text-primary">₹{deal.price}<span className="text-xs text-slate-500 font-normal">/{item.unit}</span></div>
                         </div>
-                        <Button size="sm" variant="outline" className="h-8 rounded-full text-xs">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="h-8 rounded-full text-xs"
+                          onClick={() => setLocation("/compare")}
+                          data-testid="button-compare-deal"
+                        >
                           Compare <ArrowUpRight className="w-3 h-3 ml-1" />
                         </Button>
                       </div>
@@ -155,34 +164,38 @@ export default function Home() {
 
         {/* Map Teaser */}
         <section className="relative rounded-2xl overflow-hidden h-40 shadow-md border border-slate-200">
-           <MapContainer 
-             center={center} 
-             zoom={13} 
-             zoomControl={false} 
-             dragging={false} 
-             touchZoom={false} 
-             doubleClickZoom={false} 
-             scrollWheelZoom={false}
-             style={{ height: "100%", width: "100%" }}
-           >
-             <TileLayer
-               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-             />
-             {shops.map((shop) => (
-               <Marker 
-                 key={shop.id} 
-                 position={shopCoordinates[shop.id] || center}
-               />
-             ))}
-           </MapContainer>
-           <div className="absolute inset-0 bg-black/10 flex items-center justify-center z-[500] pointer-events-none">
-             <Button 
-               className="bg-white text-primary hover:bg-white/90 shadow-lg pointer-events-auto"
-               onClick={() => setLocation("/map")}
-             >
-               <MapPin className="w-4 h-4 mr-2" /> View Full Map
-             </Button>
-           </div>
+          <Suspense fallback={<div className="w-full h-full bg-slate-100 flex items-center justify-center">Loading map...</div>}>
+            <MapContainer 
+              center={center} 
+              zoom={13} 
+              zoomControl={false} 
+              dragging={false} 
+              touchZoom={false} 
+              doubleClickZoom={false} 
+              scrollWheelZoom={false}
+              style={{ height: "100%", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; OpenStreetMap'
+              />
+              {shops.map((shop) => (
+                <Marker 
+                  key={shop.id} 
+                  position={shopCoordinates[shop.id] || center}
+                />
+              ))}
+            </MapContainer>
+          </Suspense>
+          <div className="absolute inset-0 bg-black/10 flex items-center justify-center z-[500] pointer-events-none">
+            <Button 
+              className="bg-white text-primary hover:bg-white/90 shadow-lg pointer-events-auto"
+              onClick={() => setLocation("/map")}
+              data-testid="button-view-map"
+            >
+              <MapPin className="w-4 h-4 mr-2" /> View Full Map
+            </Button>
+          </div>
         </section>
       </main>
     </div>
