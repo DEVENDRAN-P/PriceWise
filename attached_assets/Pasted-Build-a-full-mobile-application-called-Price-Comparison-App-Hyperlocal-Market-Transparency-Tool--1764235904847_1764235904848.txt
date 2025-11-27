@@ -1,0 +1,151 @@
+Build a full mobile application called “Price Comparison App – Hyperlocal Market Transparency Tool”.
+Use a modern UI, smooth animations, clean icons, and a fully responsive layout across devices.
+Create all screens, navigation, components, backend integration, and database models.
+
+📱 App Requirements (Include EVERYTHING below)
+1. Onboarding + Authentication
+
+Splash screen
+
+Intro slides explaining the benefits
+
+Login / Signup (Email + Phone)
+
+Shopkeeper Login option
+
+User role selection (Customer / Shopkeeper)
+
+2. Home Screen (Customer)
+
+Detect user location (2–3 km radius)
+
+Search bar for items (e.g., Tomato, Onion, Rice)
+
+Cards showing top deals, offers, and trending items
+
+Option to upload bill image
+
+3. Price Comparison Screen
+
+For each item, show a comparison list:
+
+🏪 Shop Name
+
+💰 Price
+
+📍 Distance
+
+⏱️ Expected travel time
+
+⚡ Stock status (Available / Low Stock / Out of Stock)
+
+Sort options:
+
+Price Low → High
+
+Nearest First
+
+Ratings
+
+Distance calculation should use the Haversine formula (do not display formula).
+
+4. Price Data Collection
+
+Two data sources:
+
+Shopkeepers
+
+Upload daily price list
+
+Update stock levels
+
+Add daily offers
+
+View competitor pricing
+
+Dashboard with analytics (top items, customer views)
+
+Customers
+
+Upload bill image
+
+OCR extracts item names + prices
+
+Price gets verified only after 2–3 matching uploads
+
+5. Intelligence Layer
+
+Add smart features:
+
+⚠️ “Stock ending soon” alerts
+
+🔥 “Today’s Offer” tag on shops
+
+📈 7-day price history graph
+
+📉 Price drop alerts for saved items
+
+🎖 Gamification: streaks, points, badges for frequent contributions
+
+6. User Dashboard
+
+Saved items
+
+Followed shops
+
+Upload bill history
+
+Reward points / contribution history
+
+Profile & settings
+
+7. Shopkeeper Dashboard
+
+Upload/Update prices
+
+Update stock & offers
+
+View analytics:
+
+Top-selling items
+
+Customer reach
+
+Price comparison with competitors
+
+8. Data Models (MongoDB or Firebase)
+
+Generate schemas for:
+
+Users (Customer / Shopkeeper)
+
+Shops
+
+Items
+
+Daily Prices
+
+Bill Uploads (with OCR result)
+
+Price Verifications
+
+Stock & Offers
+
+Rewards/Streaks
+
+9. App Design Requirements
+
+Use modern UI (Tailwind, React Native Paper, or Flutter Material 3)
+
+Smooth transitions and card animations
+
+Use icons (Heroicons, Ionicons, Lucide)
+
+Simple color palette
+
+Responsive layouts across all screen sizes
+
+10. Final Instruction
+
+Generate all screens, components, navigation, state management, backend APIs, and database models.
+The app should look polished, professional, and ready for a hackathon demo.
