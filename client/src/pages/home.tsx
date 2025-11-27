@@ -26,7 +26,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export default function Home() {
-  const { user, items, prices, shops } = useApp();
+  const { user, items, prices, shops, getCategories } = useApp();
   const [, setLocation] = useLocation();
 
   // Get top deals (lowest prices marked as offers)
@@ -88,13 +88,17 @@ export default function Home() {
         <section>
           <h3 className="font-bold text-lg mb-3">Categories</h3>
           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-            {["Vegetables", "Fruits", "Grains", "Dairy", "Spices"].map((cat, i) => (
-              <div key={i} className="flex flex-col items-center gap-2 min-w-[80px]">
-                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 border border-slate-100">
+            {getCategories().map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setLocation(`/category?cat=${cat}`)}
+                className="flex flex-col items-center gap-2 min-w-[80px] active:scale-95 transition-transform"
+              >
+                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 border border-slate-100 group-hover:shadow-md transition-shadow">
                   <img src={vegImg} alt={cat} className="w-full h-full object-cover rounded-lg" />
                 </div>
                 <span className="text-xs font-medium text-slate-600">{cat}</span>
-              </div>
+              </button>
             ))}
           </div>
         </section>

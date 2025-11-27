@@ -49,6 +49,8 @@ export interface AppState {
   login: (email: string, role: UserRole) => void;
   logout: () => void;
   addPrice: (price: Omit<Price, "id" | "updatedAt">) => void;
+  getCategories: () => string[];
+  getItemsByCategory: (category: string) => Item[];
 }
 
 // Mock Data
@@ -58,15 +60,85 @@ const MOCK_SHOPS: Shop[] = [
   { id: "s3", name: "Super Bazaar", address: "88 Market Ln", distance: 2.5, rating: 4.8, isOpen: true },
 ];
 
-import vegImg from "@assets/generated_images/fresh_vegetables_basket.png";
-import grainImg from "@assets/generated_images/grocery_staples.png";
+// Image URLs for different categories
+const categoryImages: Record<string, string> = {
+  "Vegetables": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=100&q=80",
+  "Fruits": "https://images.unsplash.com/photo-1585518419759-13a3dbfa93d5?auto=format&fit=crop&w=100&q=80",
+  "Grains": "https://images.unsplash.com/photo-1586985289688-cacba8101ec8?auto=format&fit=crop&w=100&q=80",
+  "Dairy": "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=100&q=80",
+  "Spices": "https://images.unsplash.com/photo-1596040359004-1c1e3f0dd001?auto=format&fit=crop&w=100&q=80",
+  "Clothing": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=100&q=80",
+  "Toys": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=100&q=80",
+  "Stationery": "https://images.unsplash.com/photo-1589939705882-86d282474b94?auto=format&fit=crop&w=100&q=80",
+  "Electronics": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=100&q=80",
+  "Gadgets": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=100&q=80",
+  "Books": "https://images.unsplash.com/photo-1507842217343-583f20270319?auto=format&fit=crop&w=100&q=80",
+  "Sports": "https://images.unsplash.com/photo-1517836357463-d25ddfcbf042?auto=format&fit=crop&w=100&q=80",
+};
 
 const MOCK_ITEMS: Item[] = [
-  { id: "i1", name: "Tomato", category: "Vegetables", image: vegImg, unit: "kg" },
-  { id: "i2", name: "Onion", category: "Vegetables", image: vegImg, unit: "kg" },
-  { id: "i3", name: "Basmati Rice", category: "Grains", image: grainImg, unit: "kg" },
-  { id: "i4", name: "Potato", category: "Vegetables", image: vegImg, unit: "kg" },
-  { id: "i5", name: "Milk", category: "Dairy", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=100&q=80", unit: "L" },
+  // Vegetables
+  { id: "i1", name: "Tomato", category: "Vegetables", image: categoryImages["Vegetables"], unit: "kg" },
+  { id: "i2", name: "Onion", category: "Vegetables", image: categoryImages["Vegetables"], unit: "kg" },
+  { id: "i4", name: "Potato", category: "Vegetables", image: categoryImages["Vegetables"], unit: "kg" },
+  { id: "i6", name: "Carrot", category: "Vegetables", image: categoryImages["Vegetables"], unit: "kg" },
+  { id: "i7", name: "Cucumber", category: "Vegetables", image: categoryImages["Vegetables"], unit: "kg" },
+  
+  // Fruits
+  { id: "i8", name: "Apple", category: "Fruits", image: categoryImages["Fruits"], unit: "kg" },
+  { id: "i9", name: "Banana", category: "Fruits", image: categoryImages["Fruits"], unit: "kg" },
+  { id: "i10", name: "Orange", category: "Fruits", image: categoryImages["Fruits"], unit: "kg" },
+  { id: "i11", name: "Mango", category: "Fruits", image: categoryImages["Fruits"], unit: "kg" },
+  
+  // Grains
+  { id: "i3", name: "Basmati Rice", category: "Grains", image: categoryImages["Grains"], unit: "kg" },
+  { id: "i12", name: "Wheat Flour", category: "Grains", image: categoryImages["Grains"], unit: "kg" },
+  { id: "i13", name: "Sugar", category: "Grains", image: categoryImages["Grains"], unit: "kg" },
+  
+  // Dairy
+  { id: "i5", name: "Milk", category: "Dairy", image: categoryImages["Dairy"], unit: "L" },
+  { id: "i14", name: "Yogurt", category: "Dairy", image: categoryImages["Dairy"], unit: "kg" },
+  { id: "i15", name: "Cheese", category: "Dairy", image: categoryImages["Dairy"], unit: "kg" },
+  
+  // Spices
+  { id: "i16", name: "Turmeric", category: "Spices", image: categoryImages["Spices"], unit: "kg" },
+  { id: "i17", name: "Cumin", category: "Spices", image: categoryImages["Spices"], unit: "kg" },
+  
+  // Clothing
+  { id: "i18", name: "T-Shirt", category: "Clothing", image: categoryImages["Clothing"], unit: "piece" },
+  { id: "i19", name: "Jeans", category: "Clothing", image: categoryImages["Clothing"], unit: "piece" },
+  { id: "i20", name: "Dress", category: "Clothing", image: categoryImages["Clothing"], unit: "piece" },
+  { id: "i21", name: "Shirt", category: "Clothing", image: categoryImages["Clothing"], unit: "piece" },
+  
+  // Toys
+  { id: "i22", name: "Action Figure", category: "Toys", image: categoryImages["Toys"], unit: "piece" },
+  { id: "i23", name: "Building Blocks", category: "Toys", image: categoryImages["Toys"], unit: "set" },
+  { id: "i24", name: "Puzzle", category: "Toys", image: categoryImages["Toys"], unit: "piece" },
+  { id: "i25", name: "Doll", category: "Toys", image: categoryImages["Toys"], unit: "piece" },
+  
+  // Stationery
+  { id: "i26", name: "Notebook", category: "Stationery", image: categoryImages["Stationery"], unit: "piece" },
+  { id: "i27", name: "Pen Set", category: "Stationery", image: categoryImages["Stationery"], unit: "pack" },
+  { id: "i28", name: "Pencil", category: "Stationery", image: categoryImages["Stationery"], unit: "pack" },
+  { id: "i29", name: "Eraser", category: "Stationery", image: categoryImages["Stationery"], unit: "piece" },
+  
+  // Electronics
+  { id: "i30", name: "LED Bulb", category: "Electronics", image: categoryImages["Electronics"], unit: "piece" },
+  { id: "i31", name: "Power Strip", category: "Electronics", image: categoryImages["Electronics"], unit: "piece" },
+  { id: "i32", name: "Phone Charger", category: "Electronics", image: categoryImages["Electronics"], unit: "piece" },
+  
+  // Gadgets
+  { id: "i33", name: "Smartwatch", category: "Gadgets", image: categoryImages["Gadgets"], unit: "piece" },
+  { id: "i34", name: "Wireless Earbuds", category: "Gadgets", image: categoryImages["Gadgets"], unit: "pair" },
+  { id: "i35", name: "Phone Stand", category: "Gadgets", image: categoryImages["Gadgets"], unit: "piece" },
+  
+  // Books
+  { id: "i36", name: "Fiction Novel", category: "Books", image: categoryImages["Books"], unit: "piece" },
+  { id: "i37", name: "Self-Help Book", category: "Books", image: categoryImages["Books"], unit: "piece" },
+  
+  // Sports
+  { id: "i38", name: "Sports Shoes", category: "Sports", image: categoryImages["Sports"], unit: "pair" },
+  { id: "i39", name: "Yoga Mat", category: "Sports", image: categoryImages["Sports"], unit: "piece" },
 ];
 
 const MOCK_PRICES: Price[] = [
@@ -116,8 +188,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     toast({ title: "Price Updated", description: "Your price has been listed." });
   };
 
+  const getCategories = () => {
+    return Array.from(new Set(items.map(item => item.category))).sort();
+  };
+
+  const getItemsByCategory = (category: string) => {
+    return items.filter(item => item.category === category);
+  };
+
   return (
-    <AppContext.Provider value={{ user, shops, items, prices, login, logout, addPrice }}>
+    <AppContext.Provider value={{ user, shops, items, prices, login, logout, addPrice, getCategories, getItemsByCategory }}>
       {children}
     </AppContext.Provider>
   );
