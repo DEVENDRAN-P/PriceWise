@@ -15,6 +15,18 @@ import ShopsPage from "@/pages/shops";
 import MapPage from "@/pages/map";
 import ProfilePage from "@/pages/profile";
 import CategoryPage from "@/pages/category";
+import VegetablesPage from "@/pages/vegetables";
+import FruitsPage from "@/pages/fruits";
+import GrainsPage from "@/pages/grains";
+import DairyPage from "@/pages/dairy";
+import SpicesPage from "@/pages/spices";
+import ClothingPage from "@/pages/clothing";
+import ToysPage from "@/pages/toys";
+import StationeryPage from "@/pages/stationery";
+import ElectronicsPage from "@/pages/electronics";
+import GadgetsPage from "@/pages/gadgets";
+import BooksPage from "@/pages/books";
+import SportsPage from "@/pages/sports";
 import { useEffect } from "react";
 
 function PrivateRoute({ component: Component, ...rest }: any) {
@@ -60,6 +72,44 @@ function Router() {
       </Route>
       <Route path="/category">
         {() => <PrivateRoute component={CategoryPage} />}
+      </Route>
+      
+      {/* Category Pages */}
+      <Route path="/vegetables">
+        {() => <PrivateRoute component={VegetablesPage} />}
+      </Route>
+      <Route path="/fruits">
+        {() => <PrivateRoute component={FruitsPage} />}
+      </Route>
+      <Route path="/grains">
+        {() => <PrivateRoute component={GrainsPage} />}
+      </Route>
+      <Route path="/dairy">
+        {() => <PrivateRoute component={DairyPage} />}
+      </Route>
+      <Route path="/spices">
+        {() => <PrivateRoute component={SpicesPage} />}
+      </Route>
+      <Route path="/clothing">
+        {() => <PrivateRoute component={ClothingPage} />}
+      </Route>
+      <Route path="/toys">
+        {() => <PrivateRoute component={ToysPage} />}
+      </Route>
+      <Route path="/stationery">
+        {() => <PrivateRoute component={StationeryPage} />}
+      </Route>
+      <Route path="/electronics">
+        {() => <PrivateRoute component={ElectronicsPage} />}
+      </Route>
+      <Route path="/gadgets">
+        {() => <PrivateRoute component={GadgetsPage} />}
+      </Route>
+      <Route path="/books">
+        {() => <PrivateRoute component={BooksPage} />}
+      </Route>
+      <Route path="/sports">
+        {() => <PrivateRoute component={SportsPage} />}
       </Route>
       
       <Route component={NotFound} />

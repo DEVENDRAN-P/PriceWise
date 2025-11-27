@@ -17,6 +17,22 @@ import { Suspense } from "react";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
+// Category images mapping using SVG data URIs
+const categoryImageMap: Record<string, string> = {
+  "Vegetables": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23228B22' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3EVegetables%3C/text%3E%3C/svg%3E",
+  "Fruits": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23FF6347' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3EFruits%3C/text%3E%3C/svg%3E",
+  "Grains": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23D2691E' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3EGrains%3C/text%3E%3C/svg%3E",
+  "Dairy": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%2387CEEB' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3EDairy%3C/text%3E%3C/svg%3E",
+  "Spices": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23A0522D' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3ESpices%3C/text%3E%3C/svg%3E",
+  "Clothing": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%234169E1' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='white' font-weight='bold'%3EClothing%3C/text%3E%3C/svg%3E",
+  "Toys": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23FFB6C1' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3EToys%3C/text%3E%3C/svg%3E",
+  "Stationery": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23FFD700' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='black' font-weight='bold'%3EStationery%3C/text%3E%3C/svg%3E",
+  "Electronics": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23696969' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='white' font-weight='bold'%3EElectronics%3C/text%3E%3C/svg%3E",
+  "Gadgets": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%2332CD32' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3EGadgets%3C/text%3E%3C/svg%3E",
+  "Books": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%238B4513' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3EBooks%3C/text%3E%3C/svg%3E",
+  "Sports": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23FF8C00' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-weight='bold'%3ESports%3C/text%3E%3C/svg%3E",
+};
+
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
@@ -93,12 +109,19 @@ export default function Home() {
             {getCategories().map((cat) => (
               <button
                 key={cat}
-                onClick={() => setLocation(`/category?cat=${cat}`)}
+                onClick={() => setLocation(`/${cat.toLowerCase()}`)}
                 className="flex flex-col items-center gap-2 min-w-[80px] active:scale-95 transition-transform"
                 data-testid={`button-category-${cat}`}
               >
-                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 border border-slate-100 group-hover:shadow-md transition-shadow">
-                  <img src={vegImg} alt={cat} className="w-full h-full object-cover rounded-lg" />
+                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 border border-slate-100 group-hover:shadow-md transition-shadow overflow-hidden">
+                  <img 
+                    src={categoryImageMap[cat] || vegImg} 
+                    alt={cat} 
+                    className="w-full h-full object-cover rounded-lg"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = vegImg;
+                    }}
+                  />
                 </div>
                 <span className="text-xs font-medium text-slate-600">{cat}</span>
               </button>
