@@ -11,6 +11,8 @@ import Home from "@/pages/home";
 import ComparePage from "@/pages/compare";
 import ShopkeeperDashboard from "@/pages/shopkeeper";
 import UploadPage from "@/pages/upload";
+import ShopsPage from "@/pages/shops";
+import ProfilePage from "@/pages/profile";
 import { useEffect } from "react";
 
 function PrivateRoute({ component: Component, ...rest }: any) {
@@ -44,6 +46,12 @@ function Router() {
       </Route>
       <Route path="/upload">
         {() => <PrivateRoute component={UploadPage} />}
+      </Route>
+      <Route path="/shops">
+        {() => <PrivateRoute component={ShopsPage} />}
+      </Route>
+      <Route path="/profile">
+        {() => <PrivateRoute component={ProfilePage} />}
       </Route>
       
       <Route component={NotFound} />
