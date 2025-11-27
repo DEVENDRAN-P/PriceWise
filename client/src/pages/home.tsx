@@ -7,8 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Search, MapPin, Flame, ArrowUpRight, Store } from "lucide-react";
 import bannerImg from "@assets/generated_images/sale_banner_background.png";
 import vegImg from "@assets/generated_images/fresh_vegetables_basket.png";
-import mapImg from "@assets/generated_images/map_with_shop_pins.png";
 import { motion } from "framer-motion";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 export default function Home() {
   const { user, items, prices, shops } = useApp();
@@ -16,6 +17,16 @@ export default function Home() {
 
   // Get top deals (lowest prices marked as offers)
   const deals = prices.filter(p => p.isOffer).slice(0, 3);
+
+  // Default center coordinates (New Delhi)
+  const center: [number, number] = [28.6139, 77.2090];
+
+  // Mock coordinates for shops (simulated around Delhi for demo)
+  const shopCoordinates: Record<string, [number, number]> = {
+    "s1": [28.6139, 77.2090],
+    "s2": [28.6239, 77.2190],
+    "s3": [28.6039, 77.1990],
+  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -125,14 +136,33 @@ export default function Home() {
         </section>
 
         {/* Map Teaser */}
-        <section className="relative rounded-2xl overflow-hidden h-32 shadow-md">
-           <img src={mapImg} alt="Map" className="w-full h-full object-cover" />
-           <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+        <section className="relative rounded-2xl overflow-hidden h-40 shadow-md border border-slate-200">
+           <MapContainer 
+             center={center} 
+             zoom={13} 
+             zoomControl={false} 
+             dragging={false} 
+             touchZoom={false} 
+             doubleClickZoom={false} 
+             scrollWheelZoom={false}
+             style={{ height: "100%", width: "100%" }}
+           >
+             <TileLayer
+               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+             />
+             {shops.map((shop) => (
+               <Marker 
+                 key={shop.id} 
+                 position={shopCoordinates[shop.id] || center}
+               />
+             ))}
+           </MapContainer>
+           <div className="absolute inset-0 bg-black/10 flex items-center justify-center z-[500] pointer-events-none">
              <Button 
-               className="bg-white text-primary hover:bg-white/90 shadow-lg"
+               className="bg-white text-primary hover:bg-white/90 shadow-lg pointer-events-auto"
                onClick={() => setLocation("/map")}
              >
-               <MapPin className="w-4 h-4 mr-2" /> View Shops on Map
+               <MapPin className="w-4 h-4 mr-2" /> View Full Map
              </Button>
            </div>
         </section>
