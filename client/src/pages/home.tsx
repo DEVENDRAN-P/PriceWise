@@ -9,7 +9,21 @@ import bannerImg from "@assets/generated_images/sale_banner_background.png";
 import vegImg from "@assets/generated_images/fresh_vegetables_basket.png";
 import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+// Fix Leaflet marker icon issue
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 export default function Home() {
   const { user, items, prices, shops } = useApp();
