@@ -128,7 +128,10 @@ export default function Home() {
         <section className="relative rounded-2xl overflow-hidden h-32 shadow-md">
            <img src={mapImg} alt="Map" className="w-full h-full object-cover" />
            <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-             <Button className="bg-white text-primary hover:bg-white/90 shadow-lg">
+             <Button 
+               className="bg-white text-primary hover:bg-white/90 shadow-lg"
+               onClick={() => setLocation("/map")}
+             >
                <MapPin className="w-4 h-4 mr-2" /> View Shops on Map
              </Button>
            </div>

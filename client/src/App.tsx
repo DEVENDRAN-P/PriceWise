@@ -12,6 +12,7 @@ import ComparePage from "@/pages/compare";
 import ShopkeeperDashboard from "@/pages/shopkeeper";
 import UploadPage from "@/pages/upload";
 import ShopsPage from "@/pages/shops";
+import MapPage from "@/pages/map";
 import ProfilePage from "@/pages/profile";
 import { useEffect } from "react";
 
@@ -49,6 +50,9 @@ function Router() {
       </Route>
       <Route path="/shops">
         {() => <PrivateRoute component={ShopsPage} />}
+      </Route>
+      <Route path="/map">
+        {() => <PrivateRoute component={MapPage} />}
       </Route>
       <Route path="/profile">
         {() => <PrivateRoute component={ProfilePage} />}
