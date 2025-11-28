@@ -147,7 +147,7 @@ export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
 };
 
 // Interactive engagement content
-export const INTERACTIVE_FEATURES = {
+export const INTERACTIVE_FEATURES: Record<string, { quickTips: string[]; healthBenefit: string; recipe: string }> = {
   "Vegetables": {
     quickTips: [
       "Storage: Keep in refrigerator to extend freshness",

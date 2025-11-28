@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Camera, CheckCircle2, Loader2, X, ArrowLeft } from "lucide-react";
+import { Camera, CheckCircle2, Loader2, X, ArrowLeft, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface ScannedItem {
@@ -124,7 +124,7 @@ export default function UploadPage() {
       const trimmedLine = line.trim();
       
       // Look for lines with prices
-      const priceMatches = [...trimmedLine.matchAll(priceRegex)];
+      const priceMatches = Array.from(trimmedLine.matchAll(priceRegex));
       if (priceMatches.length > 0) {
         // Get the last number as price
         const priceStr = priceMatches[priceMatches.length - 1][0];
