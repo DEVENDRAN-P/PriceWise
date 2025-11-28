@@ -299,8 +299,8 @@ export default function CategoryDetailPage({ categoryName }: CategoryPageProps) 
                         <Button 
                           size="sm" 
                           className="w-full bg-gradient-to-r from-primary to-blue-600 text-white hover:shadow-md transition-all text-xs sm:text-sm"
-                          onClick={() => addToCart(item.id)}
-                          data-testid={`button-add-${item.id}`}
+                          onClick={() => setLocation("/compare")}
+                          data-testid={`button-compare-${item.id}`}
                         >
                           <Plus className="w-3 h-3 mr-1" /> Compare
                         </Button>

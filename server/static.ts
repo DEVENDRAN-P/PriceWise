@@ -40,8 +40,16 @@ export function serveStatic(app: Express) {
     }
     next();
   });
-
-  app.use(express.static(distPath));
+  
+  app.use(express.static(distPath, {
+    setHeaders: (res, path) => {
+      // Ensure text files are displayed, not downloaded
+      if (path.endsWith('.txt') || path.endsWith('.md') || path.endsWith('.json')) {
+        res.set('Content-Disposition', 'inline');
+        res.set('Content-Type', 'text/plain; charset=utf-8');
+      }
+    }
+  }));
 
   // fall through to index.html if the file doesn't exist (for SPA routing)
   app.use("*", (_req, res) => {

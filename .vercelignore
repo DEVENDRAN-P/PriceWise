@@ -5,7 +5,7 @@ node_modules
 .local
 .replit
 README.md
-*.md
+\*.md
 .gitignore
 components.json
 src
