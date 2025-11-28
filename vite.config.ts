@@ -39,6 +39,20 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['react', 'react-dom', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-scroll-area'],
+          'forms': ['react-hook-form', '@hookform/resolvers', 'zod', 'zod-validation-error'],
+          'ui-components': ['embla-carousel-react', 'framer-motion', 'sonner', 'vaul'],
+          'maps': ['leaflet', 'react-leaflet'],
+          'charts': ['recharts'],
+          'query': ['@tanstack/react-query'],
+          'routing': ['wouter'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
   },
   server: {
     host: "0.0.0.0",
