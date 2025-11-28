@@ -11,7 +11,13 @@ export interface CategoryContent {
   emojis: string;
 }
 
-export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
+export interface InteractiveFeature {
+  quickTips: string[];
+  healthBenefit: string;
+  recipe: string;
+}
+
+export const CATEGORY_CONTENT: Record<string, CategoryContent> & { [key: string]: CategoryContent } = {
   "Vegetables": {
     name: "Fresh Farm to Table",
     description: "Handpicked fresh vegetables daily from local farms",
@@ -147,7 +153,7 @@ export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
 };
 
 // Interactive engagement content
-export const INTERACTIVE_FEATURES = {
+export const INTERACTIVE_FEATURES: Record<string, InteractiveFeature> & { [key: string]: InteractiveFeature } = {
   "Vegetables": {
     quickTips: [
       "Storage: Keep in refrigerator to extend freshness",
