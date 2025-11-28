@@ -17,6 +17,28 @@
       ]
     },
     {
+      "source": "/opengraph\\.(png|jpg|jpeg)",
+      "headers": [
+        {
+          "key": "cache-control",
+          "value": "public, max-age=86400, immutable"
+        },
+        {
+          "key": "content-type",
+          "value": "image/png"
+        }
+      ]
+    },
+    {
+      "source": "/favicon.png",
+      "headers": [
+        {
+          "key": "cache-control",
+          "value": "public, max-age=86400, immutable"
+        }
+      ]
+    },
+    {
       "source": "/index.html",
       "headers": [
         {
